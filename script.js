@@ -17,17 +17,13 @@ function divide(x,y){
 function operate(operator,x,y){
     switch(operator){
         case "+":
-            add(x,y);
-            break;
+            return add(x,y);
         case "-":
-            subtract(x,y);
-            break;
+            return subtract(x,y);
         case "*":
-            multiply(x,y);
-            break;
+            return multiply(x,y);
         case "/":
-            divide(x,y);
-            break;
+            return divide(x,y);
         default:
             throw new Error("Invalid operator");
     }
