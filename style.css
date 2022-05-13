@@ -11,6 +11,9 @@ body{
 }
 
 .display-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     height: 40%;
     border: 2px solid black;
 }
@@ -29,4 +32,24 @@ body{
 
 .row-button button {
     flex: 1;
+}
+
+.expression-container{
+    height:50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-right: 10px;
+}
+
+.result-container{
+    height:50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 10px;
+}
+
+.result-text{
+    font-size:40px;
 }
