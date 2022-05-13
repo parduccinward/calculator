@@ -1,0 +1,32 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-layout{
+    height: 420px;
+    width: 320px;
+}
+
+.display-container{
+    height: 40%;
+    border: 2px solid black;
+}
+
+.btn-container{
+    display: flex;
+    flex-direction: column;
+    height: 60%;
+    border: 2px solid black;
+}
+
+.row-button{
+    display: flex;
+    flex:1;
+}
+
+.row-button button {
+    flex: 1;
+}
