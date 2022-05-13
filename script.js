@@ -1,3 +1,6 @@
+let displayText = "";
+makeNumbersClickable();
+
 function add(x,y){
     return x+y;
 }
@@ -27,4 +30,22 @@ function operate(operator,x,y){
         default:
             throw new Error("Invalid operator");
     }
+}
+
+function makeNumbersClickable(){
+    const buttons = document.querySelectorAll(".digit-btn");
+    buttons.forEach(button => {
+        button.addEventListener("click",updateDisplay)
+    })
+}
+
+function updateDisplay(e){
+    text = saveDisplayText(displayText,e.target.id);
+    displayTextElement = document.querySelector(".expression-text");
+    displayTextElement.textContent = text;
+}
+
+function saveDisplayText(oldText, newText){
+    displayText = oldText + newText
+    return displayText;
 }
