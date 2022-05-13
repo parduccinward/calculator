@@ -30,6 +30,10 @@ body{
     flex:1;
 }
 
+button:hover{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.05) 0 0);
+}
+
 .row-button button {
     flex: 1;
 }
@@ -68,7 +72,7 @@ body{
 
 }
 
-.row-button .digit-btn, .not-assigned-btn, .clear-btn{
+.digit-btn, .not-assigned-btn, .clear-btn{
     background-color:#fdfdfd;
     border: 1px solid #838484;
     font-size: 25px;
