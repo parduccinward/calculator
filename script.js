@@ -1,3 +1,4 @@
+const operators = ["+","-","*","/"];
 let displayText = "";
 makeButtonsClickable();
 
@@ -22,7 +23,7 @@ function operate(operator,x,y){
         case "+":
             return add(x,y);
         case "-":
-            return subtract(x,y);
+            return substract(x,y);
         case "*":
             return multiply(x,y);
         case "/":
@@ -34,7 +35,6 @@ function operate(operator,x,y){
 
 function makeButtonsClickable(){
     makeNumbersClickable();
-    makeOperatorsClickable();
 }
 
 function makeNumbersClickable(){
@@ -48,17 +48,34 @@ function makeOperatorsClickable(){
     const buttons = document.querySelectorAll(".operator-btn");
     buttons.forEach(button => {
         button.addEventListener("click",addNewOperator);
+        button.disabled = false;
     })
 }
+
+function makeOperatorsNotClickable(){
+    const buttons = document.querySelectorAll(".operator-btn");
+    buttons.forEach(button => {
+        button.disabled = true;
+    })
+}
+
+function makeResultClickable(){
+    const button = document.querySelector(".result-btn");
+    button.addEventListener("click",updateDisplayResult)
+}
+
 
 function addNewNumber(e){
     let number = e.target.id;
     addNewElementToDisplay(number);
+    // makeResultClickable(); first check that the text contains 2 numbers, then do this
+    makeOperatorsClickable();
 }
 
 function addNewOperator(e){
     let operator = e.target.id;
-    checkOperatorNumber(operator);
+    addNewOperatorToDisplay(operator);
+    makeOperatorsNotClickable();
 }
 
 function addNewElementToDisplay(string){
@@ -80,15 +97,74 @@ function getDisplayText(){
     return document.querySelector(".expression-text");
 }
 
-function checkOperatorNumber(operator){
-    let operatorNumber =1;
-    if(operatorNumber==0){
+function addNewOperatorToDisplay(operator){
+    let thereIsOperator = checkThereIsOperator(operator);
+    console.log(thereIsOperator);
+    if(thereIsOperator==false){
         addNewElementToDisplay(operator);
     }else{
-        console.log("Operating first expression"); //change every console with a func
-        const result = 19;
-        console.log("the result is " + result);
-        console.log("removing old display text");
-        console.log("the new display text is : " + result+" "+ operator);
+        updateDisplayExpression(operator);
     }
+}
+
+function updateDisplayExpression(operator){
+    const numbers = getExpressionNumbers();
+    const lastOperator = getLastOperator();
+    const result = operate(lastOperator,Number(numbers.a), Number(numbers.b));
+    resetDisplayText();
+    addNewElementToDisplay(result+" "+ operator);
+}
+
+function updateDisplayResult(){
+    console.log("Updating result");
+}
+
+
+function resetDisplayText(){
+    displayText = "";
+}
+
+function checkThereIsOperator(){
+    let operatorFound = -1;
+    for(i=0;i<operators.length;i++){
+        operatorFound = displayText.indexOf(operators[i]);
+        if(!(operatorFound===-1)){
+            return true;
+        }
+    }
+    return false;
+}
+
+function getExpressionNumbers(){
+    const a = getFirstNumber();
+    const b = getLastNumber();
+    return {a,b};
+}
+
+function getFirstNumber(){
+    const operatorIndex = getOperatorIndex();
+    return displayText.slice(0,(operatorIndex));
+}
+
+function getLastNumber(){
+    const operatorIndex = getOperatorIndex();
+    return displayText.slice(operatorIndex+1);
+}
+
+function getOperatorIndex(){
+    let operatorIndex = -1;
+    for(i=0;i<displayText.length;i++){
+        for(j=0;j<operators.length;j++){
+            operatorIndex = displayText.indexOf(operators[j]);
+            if(!(operatorIndex===-1)){
+                return operatorIndex;
+            }
+        }
+    }
+    return operatorIndex;
+}
+
+function getLastOperator(){
+    const operatorIndex = getOperatorIndex();
+    return displayText.charAt(operatorIndex);
 }
