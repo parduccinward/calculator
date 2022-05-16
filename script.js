@@ -1,3 +1,11 @@
+// 1. Press = button to get the result of the expression
+// 1.1. Dont let it use it while num-operator-num2 is not complete.
+// 1.2. Change result-text to that result
+
+// 2. Erase display value when pressing clear button.
+// 3. Dont allow division by zero.
+
+
 const operators = ["+","-","*","/"];
 let displayText = "";
 makeButtonsClickable();
