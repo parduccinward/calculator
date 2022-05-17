@@ -1,6 +1,7 @@
 // 1. Press = button to get the result of the expression
 // 1.1. Dont let it use it while num-operator-num2 is not complete.
 // 1.2. Change result-text to that result
+// 1.3. Turn off result button and digits
 
 // 2. Erase display value when pressing clear button.
 // 3. Dont allow division by zero.
@@ -69,14 +70,16 @@ function makeOperatorsNotClickable(){
 
 function makeResultClickable(){
     const button = document.querySelector(".result-btn");
-    button.addEventListener("click",updateDisplayResult)
+    button.addEventListener("click",addDisplayResult)
 }
 
 
 function addNewNumber(e){
     let number = e.target.id;
     addNewElementToDisplay(number);
-    // makeResultClickable(); first check that the text contains 2 numbers, then do this
+    if(checkExpressionSyntax()){
+        makeResultClickable();
+    }
     makeOperatorsClickable();
 }
 
@@ -87,9 +90,19 @@ function addNewOperator(e){
 }
 
 function addNewElementToDisplay(string){
+    if(checkThereIsResultText()===true){
+        resetDisplayText();
+        resetResultText();
+    }
     let text = appendNewDisplayText(displayText,string);
     addToDisplay(text);
 }
+
+function addNewResultToDisplay(string){
+    let displayTextResult = document.querySelector(".result-text");
+    displayTextResult.textContent = string;
+}
+
 
 function addToDisplay(text){
     let displayTextElement = getDisplayText();
@@ -106,8 +119,10 @@ function getDisplayText(){
 }
 
 function addNewOperatorToDisplay(operator){
+    if(checkThereIsResultText()===true){
+        resetResultText();
+    }
     let thereIsOperator = checkThereIsOperator(operator);
-    console.log(thereIsOperator);
     if(thereIsOperator==false){
         addNewElementToDisplay(operator);
     }else{
@@ -117,19 +132,32 @@ function addNewOperatorToDisplay(operator){
 
 function updateDisplayExpression(operator){
     const numbers = getExpressionNumbers();
-    const lastOperator = getLastOperator();
+    const lastOperator = getCurrentOperator();
     const result = operate(lastOperator,Number(numbers.a), Number(numbers.b));
     resetDisplayText();
-    addNewElementToDisplay(result+" "+ operator);
+    addNewElementToDisplay(result+""+ operator);
 }
 
-function updateDisplayResult(){
-    console.log("Updating result");
+function addDisplayResult(){
+    const numbers = getExpressionNumbers();
+    const operator = getCurrentOperator();
+    const result = operate(operator,Number(numbers.a),Number(numbers.b));
+    addNewResultToDisplay(result);
 }
 
 
 function resetDisplayText(){
     displayText = "";
+}
+
+function resetResultText(){
+    const text = document.querySelector(".result-text");
+    text.textContent = "";
+}
+
+function checkThereIsResultText(){
+    const text = document.querySelector(".result-text").textContent;
+    return (text.length > 0) ? true: false;
 }
 
 function checkThereIsOperator(){
@@ -141,6 +169,18 @@ function checkThereIsOperator(){
         }
     }
     return false;
+}
+
+function checkExpressionSyntax(){
+    const operatorIndex = getOperatorIndex();
+    if(!(operatorIndex==-1)){
+        const slicedText = displayText.slice(operatorIndex);
+        if(displayText.includes(slicedText)){
+            return true;
+        }
+    }else{
+        return false;
+    }
 }
 
 function getExpressionNumbers(){
@@ -172,7 +212,7 @@ function getOperatorIndex(){
     return operatorIndex;
 }
 
-function getLastOperator(){
+function getCurrentOperator(){
     const operatorIndex = getOperatorIndex();
     return displayText.charAt(operatorIndex);
 }
