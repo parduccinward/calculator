@@ -1,11 +1,6 @@
-// 1. Press = button to get the result of the expression
-// 1.1. Dont let it use it while num-operator-num2 is not complete.
-// 1.2. Change result-text to that result
-// 1.3. Turn off result button and digits
-
-// 2. Erase display value when pressing clear button.
-// 3. Dont allow division by zero.
-
+// 1. Erase display value when pressing clear button.
+// 2. Dont allow division by zero.
+// 3. Round result when is decimal
 
 const operators = ["+","-","*","/"];
 let displayText = "";
@@ -44,6 +39,7 @@ function operate(operator,x,y){
 
 function makeButtonsClickable(){
     makeNumbersClickable();
+    makeClearButtonClickable();
 }
 
 function makeNumbersClickable(){
@@ -70,9 +66,19 @@ function makeOperatorsNotClickable(){
 
 function makeResultClickable(){
     const button = document.querySelector(".result-btn");
-    button.addEventListener("click",addDisplayResult)
+    button.addEventListener("click",addDisplayResult);
+    button.disabled = false;
 }
 
+function makeResultNotClickable(){
+    const button = document.querySelector(".result-btn");
+    button.disabled = true;
+}
+
+function makeClearButtonClickable(){
+    const button = document.querySelector(".clear-btn");
+    button.addEventListener("click",clearDisplay);
+}
 
 function addNewNumber(e){
     let number = e.target.id;
@@ -91,8 +97,9 @@ function addNewOperator(e){
 
 function addNewElementToDisplay(string){
     if(checkThereIsResultText()===true){
-        resetDisplayText();
+        resetDisplayValue();
         resetResultText();
+        makeResultNotClickable();
     }
     let text = appendNewDisplayText(displayText,string);
     addToDisplay(text);
@@ -121,6 +128,7 @@ function getDisplayText(){
 function addNewOperatorToDisplay(operator){
     if(checkThereIsResultText()===true){
         resetResultText();
+        makeResultNotClickable();
     }
     let thereIsOperator = checkThereIsOperator(operator);
     if(thereIsOperator==false){
@@ -134,7 +142,7 @@ function updateDisplayExpression(operator){
     const numbers = getExpressionNumbers();
     const lastOperator = getCurrentOperator();
     const result = operate(lastOperator,Number(numbers.a), Number(numbers.b));
-    resetDisplayText();
+    resetDisplayValue();
     addNewElementToDisplay(result+""+ operator);
 }
 
@@ -145,9 +153,21 @@ function addDisplayResult(){
     addNewResultToDisplay(result);
 }
 
+function clearDisplay(){
+    resetResultText();
+    resetExpressionText();
+    resetDisplayValue();
+    makeOperatorsNotClickable();
+    makeResultNotClickable();
+}
 
-function resetDisplayText(){
+function resetDisplayValue(){
     displayText = "";
+}
+
+function resetExpressionText(){
+    const text = document.querySelector(".expression-text");
+    text.textContent = "";
 }
 
 function resetResultText(){
