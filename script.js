@@ -1,5 +1,3 @@
-// 1. Round result when is decimal
-
 const operators = ["+","-","*","/"];
 let displayText = "";
 makeButtonsClickable();
@@ -21,7 +19,7 @@ function divide(x,y){
         alert("Cannot divide by zero!");
         clearDisplay();
     }else{
-        return x/y;
+        return (x/y).toFixed(11);
     }
 }
 
