@@ -1,6 +1,4 @@
-// 1. Erase display value when pressing clear button.
-// 2. Dont allow division by zero.
-// 3. Round result when is decimal
+// 1. Round result when is decimal
 
 const operators = ["+","-","*","/"];
 let displayText = "";
@@ -19,7 +17,12 @@ function multiply(x,y){
 }
 
 function divide(x,y){
-    return x/y;
+    if(y===0){
+        alert("Cannot divide by zero!");
+        clearDisplay();
+    }else{
+        return x/y;
+    }
 }
 
 function operate(operator,x,y){
